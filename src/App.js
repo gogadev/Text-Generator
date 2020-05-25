@@ -1,26 +1,71 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Header from "./components/header/Header";
+import Select from "./components/select/Select";
+import Paragraph from "./components/paragraph/Paragraph";
+import Output from "./components/output/Output";
+
+import "./App.css";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      paragraphs: 5,
+      typeText: "all-meat",
+      text: "",
+    };
+  }
+
+  getText = () => {
+    axios
+      .get(
+        `https://baconipsum.com/api/?type=${this.state.typeText}&paras=${this.state.paragraphs}&format=text`
+      )
+      .then((res) => {
+        this.setState({ text: res.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  componentDidMount = () => {
+    this.getText();
+  };
+
+  toggleText = () => {
+    this.setState(
+      {
+        typeText: this.state.typeText ? "meat-and-filler" : "all-meat",
+      },
+      this.getText
+    );
+  };
+
+  changeParas = (number) => {
+    this.setState({ paragraphs: number }, this.getText);
+  };
+
+  render() {
+    const { paragraphs, text, typeText } = this.state;
+    return (
+      <React.Fragment>
+        <Header />
+        <form className="form">
+          <label htmlFor="toggleText">~Select Text~</label>
+          <Select value={typeText} onChange={this.toggleText} />
+        </form>
+        <form className="form">
+          <label htmlFor="paragraphs">~Paragraphs~ </label>
+          <Paragraph value={paragraphs} onChange={this.changeParas} />
+        </form>
+        <Output value={text} />
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;

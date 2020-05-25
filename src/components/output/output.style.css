@@ -1,0 +1,22 @@
+.output {
+  width: 80vw;
+  display: grid;
+  margin: 0 auto;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.paras {
+  padding: 0.2rem;
+}
+
+.output-img {
+  width: 80vw;
+}
+
+.image {
+  opacity: 0.4;
+  width: 10%;
+  margin: 0.4rem auto;
+}
